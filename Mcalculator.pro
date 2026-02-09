@@ -11,12 +11,13 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     mainwindow.cpp\
-    matrix.cpp
+    matrix.cpp\
+    smatrix.cpp
 
 HEADERS += \
     mainwindow.h\
-    matrix.h
-
+    matrix.h\
+    smatrix.h
 FORMS += \
     mainwindow.ui
 

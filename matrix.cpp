@@ -4,6 +4,7 @@
 #include <string>
 #include <cmath>
 #include "matrix.h"
+#include "smatrix.h"
 using namespace std;
 //memory allocation
 void Matrix::allocate(){

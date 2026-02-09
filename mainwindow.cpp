@@ -26,7 +26,7 @@ void MainWindow::displayMatrixResult(const Matrix &matrix, const QString& operat
 
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < cols; ++j) {
-            QTableWidgetItem *item = new QTableWidgetItem(QString::number(matrix(i,j), 'f', 2));
+            QTableWidgetItem *item = new QTableWidgetItem(QString::number(matrix(i,j), 'f', 5));
             tableWidget->setItem(i, j, item);
         }
     }
@@ -170,5 +170,51 @@ void MainWindow::on_btn_pow_clicked()
             QMessageBox::critical(this, "Status", "Sizing error.");
         }
     }
+}
+
+
+void MainWindow::on_btn_det_clicked()
+{
+    Matrix A(1,1);
+    if (setmatrix(A, "Matrix A")) {
+        // Logic: Check if matrix is square
+        if (A.getCols() == A.getRows()) {
+            SquareMatrix result = A;
+            double detValue = result.det();
+            QMessageBox::information(this, "Determinant Result", "The determinant of Matrix A is: " + QString::number(detValue));
+            QMessageBox::information(this, "Success", "Determinant found successfully.");
+        } else {
+            QMessageBox::critical(this, "Math Error", "Matrices sizes not correct");
+        }
+    }
+}
+
+
+void MainWindow::on_btn_inv_clicked()
+{
+    Matrix A(1,1);
+    if (setmatrix(A, "Matrix A")) {
+        // Logic: Check if matrix is square
+        if (A.getCols() == A.getRows()) {
+            SquareMatrix sA = A;
+            SquareMatrix result = sA.inverse();
+            displayMatrixResult(result, "Inverted Matrix");
+            QMessageBox::information(this, "Success", "Inverse matrix found successfully.");
+        } else {
+            QMessageBox::critical(this, "Math Error", "Matrices sizes not correct");
+        }
+    }
+}
+
+
+void MainWindow::on_btn_rank_clicked()
+{
+    //no code yet
+}
+
+
+void MainWindow::on_pushButton_clicked()
+{
+    //no code yet
 }
 

@@ -16,6 +16,7 @@
 #include <QVector>
 #include <QMainWindow>
 #include "matrix.h"
+#include "smatrix.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -40,6 +41,10 @@ private slots:
     void on_btn_mult_clicked();
 
     void on_btn_pow_clicked();
+
+    void on_btn_det_clicked();
+
+    void on_btn_inv_clicked();
 
 private:
     Ui::MainWindow *ui;
