@@ -46,6 +46,10 @@ private slots:
 
     void on_btn_inv_clicked();
 
+    void on_btn_rank_clicked();
+
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
