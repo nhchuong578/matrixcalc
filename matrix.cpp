@@ -309,18 +309,33 @@ Matrix transpose(const Matrix& A){
     }
     return C;
 }
-/*
-bool Matrix::isSymmetric() const{
-    if(isSquare==1)
-    int Flag=1;
-    for (int i=0 ; i < row; ++i){
-        for (int j= 0; j <col; ++j){
-            if (entry[i][j]!= entry[j][i]){
-                Flag = 0;
+
+int Matrix::rank(Matrix mat) const {
+    int rows = mat.getRows();
+    int cols = mat.getCols();
+    int rank = 0;
+    for (int i = 0, j = 0; i < rows && j < cols; ++j) {
+        //Find pivot in this column
+        int pivot = i;
+        for (;pivot < rows && abs(mat(pivot, j)) < 1e-6;)
+            ++pivot;
+        //If the whole column is zero, move to next column
+        if (pivot == rows) continue;
+        //Swap current row with pivot row
+        if (pivot != i) {
+            for (int c = 0; c < cols; ++c)
+                swap(mat(i, c), mat(pivot, c));
+        }
+        //Eliminate other rows
+        for (int r = 0; r < rows; ++r) {
+            if (r != i) {
+                double factor = mat(r, j) / mat(i, j);
+                for (int c = j; c < cols; ++c)
+                    mat(r, c) -= factor * mat(i, c);
             }
         }
+        ++rank;
+        ++i;
     }
-    return Flag;
+    return rank;
 }
-    */
-

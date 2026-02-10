@@ -209,12 +209,12 @@ void MainWindow::on_btn_inv_clicked()
 
 void MainWindow::on_btn_rank_clicked()
 {
+    Matrix A(1,1);
+    if (setmatrix(A, "Matrix A") ){
+        double rank = A.rank(A);
+        QMessageBox::information(this, "Success", "The rank of Matrix A is: "+QString::number(rank));
+    }
+}
+void MainWindow::on_btn_systems_clicked(){
     //no code yet
 }
-
-
-void MainWindow::on_pushButton_clicked()
-{
-    //no code yet
-}
-

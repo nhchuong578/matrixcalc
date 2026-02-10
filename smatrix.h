@@ -41,8 +41,10 @@ public:
     virtual double det() const; 
     bool isInvertible() const;
     SquareMatrix cofactor(const int& p, const int& q) const;
-    SquareMatrix adjoint() const; 
-    SquareMatrix inverse() const; 
+    SquareMatrix adjoint() const;
+    SquareMatrix inverse() const;
+    int rank(SquareMatrix smat) const;
+    Matrix x(SquareMatrix A, Matrix b);
     
 };
 

@@ -48,7 +48,7 @@ private slots:
 
     void on_btn_rank_clicked();
 
-    void on_pushButton_clicked();
+    void on_btn_systems_clicked();
 
 private:
     Ui::MainWindow *ui;

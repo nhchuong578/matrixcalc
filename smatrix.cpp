@@ -224,3 +224,33 @@ SquareMatrix SquareMatrix::inverse() const {
 
 	return inv;
 }
+
+int SquareMatrix::rank(SquareMatrix smat) const {
+    //If a Square Matrix is non-singular, its rank is equal its size
+    if (smat.isInvertible()) return smat.getSize();
+    //If it is Low-/Up-Tri, its rank is its diagonal entry different from 0
+    else if (smat.isLowTri() || smat.isUpTri()) {
+        int rank = 0;
+        for (int i = 0; i < smat.getSize(); ++i) {
+            if (smat(i, i) != 0) rank++;
+        }
+        return rank;
+    }
+
+    else {
+        return Matrix::rank(smat);
+    }
+}
+
+Matrix SquareMatrix::x(SquareMatrix A, Matrix b) {
+    assert(A.getSize() == b.getCols());
+    assert(b.getRows() == 1);
+    Matrix x(1, A.getSize());
+    x.zeros();
+    if (!A.isInvertible()) {
+        cout << "This matrix is singular.The system may have no unique solution" << endl;
+        return x;
+    }
+    x = b * A.inverse();
+    return transpose(x);
+}
