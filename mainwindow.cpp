@@ -105,7 +105,67 @@ bool MainWindow::setmatrix(Matrix &matrix, const QString &matrixName) {
     }
     return false;
 }
+bool MainWindow::setvector(Matrix &matrix, const QString &matrixName, int row) {
+    bool ok;
+    int rows = row;
 
+    int cols = 1;
+
+    QDialog dialog(this);
+    dialog.setWindowTitle("Vector "+ matrixName + " Input");
+    dialog.setMinimumSize(300, 200);
+
+    QTableWidget *tableWidget = new QTableWidget(rows, cols, &dialog);
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            tableWidget->setItem(i, j, new QTableWidgetItem("0"));
+        }
+    }
+    int cellWidth = 60;
+    int cellHeight = 30;
+    tableWidget->horizontalHeader()->setDefaultSectionSize(cellWidth);
+    tableWidget->verticalHeader()->setDefaultSectionSize(cellHeight);
+
+
+    int tableWidth = tableWidget->columnWidth(0) * cols + tableWidget->verticalHeader()->width() + 20;
+    int tableHeight = tableWidget->rowHeight(0) * rows + tableWidget->horizontalHeader()->height() + 20;
+
+    QSize screenSize = QGuiApplication::primaryScreen()->availableGeometry().size();
+    dialog.resize(qMin(screenSize.width() - 100, tableWidth + 50),
+                  qMin(screenSize.height() - 100, tableHeight + 100));
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dialog);
+    QVBoxLayout *layout = new QVBoxLayout(&dialog);
+    layout->addWidget(tableWidget);
+    layout->addWidget(buttonBox);
+
+    connect(buttonBox, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+
+    if (dialog.exec() == QDialog::Accepted) {
+        // Construct the result matrix directly into the reference
+        Matrix temp(rows, cols);
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                QTableWidgetItem *item = tableWidget->item(i, j);
+                if (!item || item->text().isEmpty()) {
+                    QMessageBox::warning(this, "Error", "Empty cell detected.");
+                    return false;
+                }
+
+                double value = item->text().toDouble(&ok);
+                if (!ok) {
+                    QMessageBox::warning(this, "Error", "Invalid number at " + QString::number(i+1) + "," + QString::number(j+1));
+                    return false;
+                }
+                temp(i, j) = value;
+            }
+        }
+        matrix = temp; // Uses your Matrix assignment operator
+        return true;
+    }
+    return false;
+}
 void MainWindow::on_btn_sum_clicked() {
     Matrix A(1,1), B(1,1);
     if (setmatrix(A, "Matrix A") && setmatrix(B, "Matrix B")) {
@@ -216,5 +276,23 @@ void MainWindow::on_btn_rank_clicked()
     }
 }
 void MainWindow::on_btn_systems_clicked(){
-    //no code yet
+    Matrix A(1,1);
+    if (setmatrix(A, "Coefficient Matrix") ){
+        //check if matrix is square
+        if (A.getCols() == A.getRows()) {
+            SquareMatrix sA = A;
+            Matrix B(sA.getSize(), 1);
+            if (setvector(B, "Vector B",sA.getSize())){
+                if (!sA.isInvertible()) {
+                    QMessageBox::critical(this, "Math error", "This matrix is singular. The system may have no unique solution");
+                    return ;
+                }
+                Matrix x = sA.x(sA, B);
+                displayMatrixResult(x, "Variable Matrix");
+                QMessageBox::information(this, "Success", "Variable matrix found successfully.");
+            }
+        } else{
+            QMessageBox::critical(this, "Math Error", "Coefficient matrix must be square");
+        }
+    }
 }

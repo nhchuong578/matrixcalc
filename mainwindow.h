@@ -34,6 +34,7 @@ public:
 
 private slots:
     bool setmatrix(Matrix &matrix, const QString &matrixName);
+    bool setvector(Matrix &matrix, const QString &matrixName, int row);
     void on_btn_sum_clicked();
     void displayMatrixResult(const Matrix &matrix, const QString &operation);
     void on_btn_sub_clicked();
